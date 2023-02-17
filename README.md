@@ -1,4 +1,4 @@
-# ELM4PSIR - Exploring Language Modelling for NHS Patient Safety Incident Reports
+# ELM4PSIR - Exploring Language Modelling for (NHS) Patient Safety Incident Reports
 ## NHS England -  Digital Analytics and Research Team (DART) - PhD Internship Project
 
 ### About the Project
