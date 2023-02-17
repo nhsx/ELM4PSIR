@@ -9,6 +9,8 @@ ELM4PSIR presents code to train, evaluate, and explore various Language Models (
 
 This work was conducted as part of an NHS England DART PhD Internship project by [Niall Taylor](https://github.com/NtaylorOX) for around five months between June - November 2022.  Further information on the original project proposal can be found [here](https://nhsx.github.io/nhsx-internship-projects/incident-language-model/).
 
+The associated report can be found in the [reports](./reports) folder.
+
 _**Note:** No data, public or private are shared in this repository._
 
 ### Project Stucture
@@ -34,10 +36,10 @@ ELM4PSIR is made up of multiple "strands" or pipelines revolving around generati
 └── requirements.txt
 ```
 #### `checklist_testing`
-An examplementation of *behavioural* testing of trained NLP models with a patient safety example. This utilises the `CheckList` framework outlined at [checklist-repo](https://github.com/macrotcr/checklist). Further details provided in the [checklist_testing](./checklist_testing/) folder.
+An example implementation of *behavioural* testing of trained NLP models with a patient safety example. This utilises the `CheckList` framework outlined at [checklist-repo](https://github.com/macrotcr/checklist). Further details provided in the [checklist_testing](./checklist_testing/) folder.
 
 #### `classification_tasks`
-This is a quite large set of pipelines for training and evaluating various text classification models on selected downstream pseudo-tasks related to NHS patient safety reports, with more details in the [report](./report).
+A quite large set of pipelines for training and evaluating various text classification models on selected downstream pseudo-tasks related to patient safety reports, with more details in the [report](./reports).
 
 #### `embedding_tools`
 A set of scripts and notebooks for comparing and visualising contextualised embeddings produced by the pretrained language models produced by this repo.
@@ -50,7 +52,11 @@ An attempt to highlight and direct users to a range of topic modelling approache
 
 ### Built With
 
-The majority of this codebase was developed in [![Python v3.8](https://img.shields.io/badge/python-v3.8-blue.svg)](https://www.python.org/downloads/release/python-380/)
+The majority of this codebase was developed in [![Python v3.8](https://img.shields.io/badge/python-v3.8-blue.svg)](https://www.python.org/downloads/release/python-380/).
+
+The work in mostly undertaken in [`PyTorch`](https://pytorch.org/) and heavily utilises the [`Transformers`](https://huggingface.co/docs/transformers/index) package for the vast majority language model handelling.
+
+Further, we have included modified copies of various scripts and codebases within the repository (with references) where appropriate or needed.  The most sizable inclusions are the [DeCLUTR](./language_modelling/DeCLUTR/) codebase which was modified to work on our hardware/OS setup, and the [Word Vector models](./classification_tasks/models/baselineTextClassifiers/word_vector_nn/) used in the baselining approaches.  We give thanks to the authors of all components incorporated for making such useful and resuable projects.
 
 ⚠️ Warning ⚠️
 
@@ -166,7 +172,7 @@ A popular, accessible clinical dataset which could be used instead is MIMIC-III,
 From a high-level, the **NOTEEVENTS.csv** would provide a suitable dataset for this repository. Further, there is a wealth of research that has used these data for NLP models for a variety of language modelling and downstream tasks. A good starting point for pre-processing and curating a suitable dataset for this repo would be the following [github-repo](https://jamesmullenbach/caml-mimic).
 
 #### Outputs
-Report Link...
+The associated report can be found in the [reports](./reports) folder.
 
 ### Roadmap
 
