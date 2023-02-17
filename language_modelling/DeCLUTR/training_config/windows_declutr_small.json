@@ -1,0 +1,70 @@
+{
+    "vocabulary": {
+        "type": "empty"
+    },
+    "dataset_reader": {
+        "type": "declutr",
+        "lazy": true,
+        "num_anchors": 2,
+        "num_positives": 2,
+        "max_span_len": 512,
+        "min_span_len": 32,
+        "tokenizer": {
+            "type": "pretrained_transformer",
+            "model_name": transformer_model,
+            "max_length": 512 - 2,
+        },
+        "token_indexers": {
+            "tokens": {
+                "type": "pretrained_transformer",
+                "model_name": transformer_model,
+            },
+        },
+    },
+    "train_data_path": null,
+    "model": {
+        "type": "declutr",
+        "text_field_embedder": {
+            "type": "mlm",
+            "token_embedders": {
+                "tokens": {
+                    "type": "pretrained_transformer_mlm",
+                    "model_name": transformer_model,
+                    "masked_language_modeling": true
+                },
+            },
+        },
+        "loss": {
+            "type": "nt_xent",
+            "temperature": 0.05,
+        },
+        "scale_fix": false
+    },
+    "data_loader": {
+        "batch_size": 4,
+        "num_workers": 1,
+        "drop_last": true,
+    },
+    "trainer": {
+        "use_amp": true,
+        "optimizer": {
+            "type": "huggingface_adamw",
+            "lr": 5e-5,
+            "eps": 1e-06,
+            "correct_bias": false,
+            "weight_decay": 0.1,
+            "parameter_groups": [
+                [["bias", "LayerNorm.weight", "layer_norm.weight"], {"weight_decay": 0}],
+            ],
+        },
+        "num_epochs": 1,
+        "checkpointer": {
+
+            "num_serialized_models_to_keep": -1,
+        },
+        "grad_norm": 1.0,
+        "learning_rate_scheduler": {
+            "type": "slanted_triangular",
+        },
+    },
+}
