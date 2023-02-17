@@ -143,8 +143,8 @@ We have given the user the possibility to create pseudo-classification tasks wit
 There is the ability to process all possible category/task datasets from available categorical variables given and output them all together in one `csv`, or to process each individually and save to their own respective folders.
 
 __NOTE__  We have have only implemented downstream models for the following two categorical variables provided with the NHS patient safety incident reports data:
-- patient safety incident type (IN05)
-- degree of harm (PD09)
+- Incident Category Classification (Patient Safety Incident Type, IN05)
+- Severity Classification (Degree of Harm, PD09)
 
 with further details provided inside the `classification_tasks` folder [README.md](./classification_tasks/README.md).
 
