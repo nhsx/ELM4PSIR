@@ -20,7 +20,6 @@ Example usage from cmd line for sampling:
 python prepare_notes_for_lm.py --sample --train_sample_size 1000
  --test_sample_size 100
 ```
-
 """
 
 
@@ -40,7 +39,6 @@ class LMTextData:
         seed=41,
         text_col=None,
     ):
-
         self.admin_language = admin_language
         self.sample = sample
         self.train_sample_size = train_sample_size
@@ -77,7 +75,6 @@ class LMTextData:
         replacement_map=None,
         remove_punctuation=False,
     ) -> pd.DataFrame:
-
         """
          TODO - add function to allow mapping of known acronyms to full words
 
@@ -141,7 +138,6 @@ class LMTextData:
         return filtered_df.dropna()
 
     def read_write_all_text(self):
-
         """
         Function to read in and clean text files in preparation for transformer based
         language modelling

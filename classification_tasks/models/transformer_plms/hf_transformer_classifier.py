@@ -45,6 +45,7 @@ def plot_confusion_matrix(cm, class_names):
 
     credit: (https://towardsdatascience.com/
             exploring-confusion-matrix-evolution-on-tensorboard-e66b39f4ac12)
+
     """
 
     font = FontProperties()
@@ -89,7 +90,6 @@ class IncidentDataset(Dataset):
         mode="train",
         label_col="label",
     ):
-
         self.tokenizer = tokenizer
         self.data = data
         self.max_token_len = max_token_len
@@ -194,7 +194,6 @@ class IncidentModel(pl.LightningModule):
         cache_dir=None,
         model_type="autoforsequence",
     ):
-
         super().__init__()
         logger.warning(
             (
@@ -219,7 +218,6 @@ class IncidentModel(pl.LightningModule):
                 return_dict=True,
             )
         elif self.model_type == "customclassifier":
-
             logger.warning(
                 (
                     "Will be using based AutoModel with our own classification head! "
@@ -328,7 +326,6 @@ class IncidentModel(pl.LightningModule):
                 # else:
                 #     raise NotImplementedError
             else:
-
                 for param in self.model.parameters():
                     param.requires_grad = True
         self._frozen = False
@@ -421,7 +418,6 @@ class IncidentModel(pl.LightningModule):
             return outputs
 
         elif self.model_type == "customclassifier":
-
             outputs = self.model(
                 input_ids,
                 attention_mask=attention_mask,
@@ -472,7 +468,6 @@ class IncidentModel(pl.LightningModule):
 
     # TODO - update the training steps etc to work with SequenceClassifierOutput
     def training_step(self, batch, batch_idx):
-
         # input_ids = batch["input_ids"]
         # attention_mask = batch["attention_mask"]
         labels = batch["labels"]
@@ -515,11 +510,9 @@ class IncidentModel(pl.LightningModule):
         predictions = []
         scores = []
         for output in outputs:
-
             for out_labels in output["labels"].to("cpu").detach().numpy():
                 labels.append(out_labels)
             for out_predictions in output["predictions"]:
-
                 # the handling of roc_auc score differs for binary and multi class
                 if len(class_labels) > 2:
                     scores.append(
@@ -646,11 +639,9 @@ class IncidentModel(pl.LightningModule):
         predictions = []
         scores = []
         for output in outputs:
-
             for out_labels in output["labels"].to("cpu").detach().numpy():
                 labels.append(out_labels)
             for out_predictions in output["predictions"]:
-
                 # the handling of roc_auc score differs for binary and multi class
                 if len(class_labels) > 2:
                     scores.append(
@@ -735,7 +726,6 @@ class IncidentModel(pl.LightningModule):
         """Sets different Learning rates for different parameter groups."""
 
         if self.model_type == "autoforsequence":
-
             # if "roberta" in self.model.name_or_path:
             #     parameters = [
             #         {"params": self.model.classifier.parameters()},

@@ -45,7 +45,6 @@ Provide training and test data paths to your own data
 - allenai/biomed_roberta_base
 
 facebooks bio-lms: github.com/facebookresearch/bio-lm
-
 """
 
 
@@ -396,7 +395,6 @@ def main():
         return logits.argmax(dim=-1)
 
     def compute_mlm_accuracy(eval_preds):
-
         """
         Function to compute a basic accuracy for MLM - i.e. did the model correctly
         predict the token at the [MASK] position
@@ -415,7 +413,6 @@ def main():
         return {"accuracy": accuracy_manual}
 
     def compute_clm_accuracy(eval_preds):
-
         """
         Function to compute a basic accuracy for causal/autoregressive LM - i.e. did
         the model correctly predict the next token. Generally we just care

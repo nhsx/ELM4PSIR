@@ -7,6 +7,8 @@
 
 ELM4PSIR presents code to train, evaluate, and explore various Language Models (LM) applied to patient safety incident data in the NHS from the National Reporting and Learning System (NLRS) with the goal of creating better models to aid in various downstream tasks.
 
+**This repository is experimental and thus models generated using this repository are not suitable to deploy into a production environment without further testing and evaluation - please see the [Model Card](./model_card.md) for more details.**
+
 This work was conducted as part of an NHS England DART PhD Internship project by [Niall Taylor](https://github.com/NtaylorOX) for around five months between June - November 2022.  Further information on the original project proposal can be found [here](https://nhsx.github.io/nhsx-internship-projects/incident-language-model/).
 
 The associated report can be found in the [reports](./reports) folder.
@@ -206,4 +208,6 @@ of the [Open Government 3.0][ogl] licence.
 
 To find out more about [DART](https://www.nhsx.nhs.uk/key-tools-and-info/nhsx-analytics-unit/) visit our [project website](https://nhsx.github.io/AnalyticsUnit/projects.html) or get in touch [here](mailto:analytics-unit@nhsx.nhs.uk).
 
-<!-- ### Acknowledgements -->
+### Acknowledgements
+
+We would like to thank the members of the Patient Safety Team in NHS England who engaged with us throughout the project and shared their in-depth knowledge of the area to help shape our exploration.

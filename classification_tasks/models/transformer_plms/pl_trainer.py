@@ -19,6 +19,7 @@ from transformers import AutoTokenizer
 
 sys.path.append("../..")
 
+
 from data_utils.dataset_processing import (  # noqa: E402
     FewShotSampler,
     convert_to_binary_classes,
@@ -86,7 +87,6 @@ python pl_trainer.py --model_type customclassifier --encoder_model roberta-base
 
 
 def get_class_weights(train_df, label_col):
-
     """
     Function to compute class weights for cross entropy loss in the case of imbalanced
     datasets i.e. to penalize model that overfits to majority class
@@ -438,7 +438,6 @@ def main():
         )
 
     elif args.binary_class_transform:
-
         ckpt_dir = (
             f"{args.ckpt_save_dir}/{args.dataset}/binary_class/{args.training_size}_"
             f"{args.few_shot_n}_classhidden_{args.classifier_hidden_dim}/"

@@ -12,7 +12,6 @@ def create_holdout_set(
     hold_out_percentage: float = 0.10,
     seed: int = 42,
 ):
-
     """
     Function to read in all raw data and save a holdout set. Leaving a working training
     and holdout set for later use.
@@ -31,7 +30,6 @@ def create_holdout_set(
 
     python create_lm_data_split.py --raw_data_file ./data/raw_data.csv
     --save_path ./data/lm_data/ --hold_out_percentage 0.10
-
     """
 
     logger.warning(

@@ -17,7 +17,6 @@ The datasets can be processed and stored individually in their own respective fo
 or all together in one big dataset. These just make certain downstream tasks easier to
 organise.
 
-
 Example usage from cmd line for sampling:
 
 `python prepare_classification_datasets.py --sample --sample_size 10`
@@ -50,7 +49,6 @@ class LMTextData:
         process_individually=False,
         binary_transform=False,
     ):
-
         self.admin_language = admin_language
         self.sample = sample
         self.sample_size = sample_size
@@ -74,7 +72,6 @@ class LMTextData:
     def clean_data(
         self, admin_language, notes_df: pd.DataFrame, remove_punctuation=True
     ) -> pd.DataFrame:
-
         """
          TODO - add function to allow mapping of known acronyms to full words
 
@@ -137,7 +134,6 @@ class LMTextData:
         return filtered_df.dropna()
 
     def create_classification_datasets(self):
-
         """
         Slightly crude function to run over the dataframe and create each
         classification dataset we have

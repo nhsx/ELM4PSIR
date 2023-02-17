@@ -2,7 +2,7 @@
 
 ## Model Details
 
-The implementation of the ELM4PSIR within this repository was created as part of an NHS England PhD internship project undertaken by Niall Taylor. This model card describes the updated version of the model.
+The implementation of the ELM4PSIR within this repository was created as part of an NHS England PhD internship project undertaken by Niall Taylor.
 
 ## Model Use
 ### Intended Use
@@ -12,8 +12,6 @@ This model is intended for use in {BRIEF DESCRIPTION OF USE}
 ### Out-of-Scope Use Cases
 
 This model is not suitable to provide privacy guarantees in a production environment.
-
-{DETAIL KNOWN CASES WHERE PRIVACY IS NOT GUARENTEED}
 
 ## Training Data
 

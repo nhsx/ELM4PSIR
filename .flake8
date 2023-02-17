@@ -8,7 +8,7 @@ exclude =
     node_modules,
     bower_components,
     migrations,
-    language_modelling/DeCLUTR,
+    language_modelling/DeCLUTR/*,
     classification_tasks/models/baselineTextClassifiers/word_vector_nn/*
 ignore = D203,W503
 max-line-length = 115
