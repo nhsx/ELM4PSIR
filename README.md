@@ -52,9 +52,7 @@ An attempt to highlight and direct users to a range of topic modelling approache
 
 ### Built With
 
-The majority of this codebase was developed in [![Python v3.8](https://img.shields.io/badge/python-v3.8-blue.svg)](https://www.python.org/downloads/release/python-380/).
-
-The work in mostly undertaken in [`PyTorch`](https://pytorch.org/) and heavily utilises the [`Transformers`](https://huggingface.co/docs/transformers/index) package for the vast majority language model handelling.
+The majority of this codebase was developed in [![Python v3.8](https://img.shields.io/badge/python-v3.8-blue.svg)](https://www.python.org/downloads/release/python-380/).  The work is mostly undertaken in [`PyTorch`](https://pytorch.org/) and heavily utilises the [`Transformers`](https://huggingface.co/docs/transformers/index) package for the vast majority language model handelling.
 
 Further, we have included modified copies of various scripts and codebases within the repository (with references) where appropriate or needed.  The most sizable inclusions are the [DeCLUTR](./language_modelling/DeCLUTR/) codebase which was modified to work on our hardware/OS setup, and the [Word Vector models](./classification_tasks/models/baselineTextClassifiers/word_vector_nn/) used in the baselining approaches.  We give thanks to the authors of all components incorporated for making such useful and resuable projects.
 
@@ -206,6 +204,6 @@ of the [Open Government 3.0][ogl] licence.
 
 ### Contact
 
-To find out more about the [Analytics Unit](https://www.nhsx.nhs.uk/key-tools-and-info/nhsx-analytics-unit/) visit our [project website](https://nhsx.github.io/AnalyticsUnit/projects.html) or get in touch at [analytics-unit@nhsx.nhs.uk](mailto:analytics-unit@nhsx.nhs.uk).
+To find out more about [DART](https://www.nhsx.nhs.uk/key-tools-and-info/nhsx-analytics-unit/) visit our [project website](https://nhsx.github.io/AnalyticsUnit/projects.html) or get in touch [here](mailto:analytics-unit@nhsx.nhs.uk).
 
 <!-- ### Acknowledgements -->
