@@ -6,14 +6,4 @@ Instructions on how to update this Changelog are available in the `Updating the 
 
 ## [Unreleased v1.0.0]
 
-### Breaking Changes
-
-- {LIST OF MAJOR CHANGES}
-
-### New Features
-
-- {LIST OF NEW FEATURES}
-
-### Fixed
-
-- {LIST OF FIXES}
+Working codebase and report for ELM4PSIR from the initial work completed as part of the NHS England PhD Internship from June-November 2022.
