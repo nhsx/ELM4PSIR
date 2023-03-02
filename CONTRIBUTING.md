@@ -12,7 +12,7 @@ Please read [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) before contributing.
 
 ## Commit hygiene
 
-Please see the GDS [Git style guide in the 'How to store source code' page of the GDS Way](https://gds-way.cloudapps.digital/standards/source-code.html#commit-messages), which describes how we prefer Git history and commit messages to read.
+Please see the GDS [Git style guide in the 'How to store source code' page of the GDS Way](https://gds-way.cloudapps.digital/standards/source-code/), which describes how we prefer Git history and commit messages to read.
 
 ## Updating the Changelog
 
