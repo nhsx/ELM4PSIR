@@ -73,6 +73,15 @@ conda activate elm4psir
 python -m pip install -r requirements.txt
 ```
 
+The repository uses [pre-commit](https://pre-commit.com) hooks to enforce code style using [black](https://github.com/psf/black), follows [flake8](https://github.com/PyCQA/flake8), and performs a few other checks.  See `.pre-commit-config.yaml` for more details. These hooks will also need installing locally via:
+
+```{bash}
+pre-commit autoupdate
+pre-commit install
+```
+
+and then will be checked on commit.
+
 When training on GPU machines, the appropriate PyTorch bundle should be installed - for more info: `https://pytorch.org/get-started/locally/`
 
 ```{bash}
