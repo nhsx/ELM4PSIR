@@ -353,31 +353,31 @@ class IncidentModel(pl.LightningModule):
             for param in self.model.parameters():
                 param.requires_grad = False
         self._frozen = True
+    
+    def freeze_n_layers(model, freeze_layer_count = 0) -> None:
+        """freeze N last layers of a transformer model"""
+        # first freeze the embedding layer
+        for param in model.base_model.embeddings.parameters():
+                param.requires_grad = False
+        # if the freeze layer count is 0 - do nothing and leave requires_grad = True i.e. the default after loading model in
+        
+        if freeze_layer_count > model.config.num_hidden_layers:
+            print(f"The freeze_layer_count provided:{freeze_layer_count} is higher than the number of layers the model has: {model.config.num_hidden_layers}!  ")
+        else:
+            if freeze_layer_count != 0:        
+            
+                if freeze_layer_count != -1:
+                    # if freeze_layer_count == -1, we freeze all of em
+                    # otherwise we freeze the first `freeze_layer_count` encoder layers
+                    for layer in model.base_model.encoder.layer[:freeze_layer_count]:
+                        for param in layer.parameters():
+                            param.requires_grad = False
+                else:
+                    for layer in model.base_model.encoder.layer:
+                        for param in layer.parameters():
+                            param.requires_grad = False                          
 
-    # def forward(self, input_ids, attention_mask, labels=None):
-    #     output = self.model(input_ids, attention_mask=attention_mask)
-    #     # obtaining the last layer hidden states of the Transformer
-    #     last_hidden_state = output.last_hidden_state  # shape: (
-    #       batch_size,
-    #       seq_length,
-    #       bert_hidden_dim
-    #      )
 
-    #     #         or can use the output pooler : output = self.classifier(
-    #       output.pooler_output
-    #       )
-    #     # As I said, the CLS token is in the beginning of the sequence. So, we grab
-    #       its representation
-    #     # by indexing the tensor containing the hidden representations
-    #     CLS_token_state = last_hidden_state[:, 0, :]
-    #     # passing this representation through our custom head
-    #     logits = self.classifier(CLS_token_state)
-    #     loss = 0
-    #     if labels is not None:
-    #         loss = self.criterion(logits, labels)
-    #     return loss, logits
-
-    # TODO - adapt this below forward method to work
     def forward(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -466,7 +466,7 @@ class IncidentModel(pl.LightningModule):
         else:
             raise NotImplementedError
 
-    # TODO - update the training steps etc to work with SequenceClassifierOutput
+    
     def training_step(self, batch, batch_idx):
         # input_ids = batch["input_ids"]
         # attention_mask = batch["attention_mask"]
@@ -555,7 +555,7 @@ class IncidentModel(pl.LightningModule):
         recall_weighted = recall_score(labels, predictions, average="weighted")
         recall_macro = recall_score(labels, predictions, average="macro")
 
-        #  roc_auc  - only really good for binaryy classification but can try for
+        #  roc_auc  - only really good for binary classification but can try for
         # multiclass too pytorch lightning runs a sanity check and roc_score fails
         # if not all classes appear...
         try:
