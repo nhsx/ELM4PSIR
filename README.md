@@ -215,7 +215,7 @@ of the [Open Government 3.0][ogl] licence.
 
 ### Contact
 
-To find out more about [DART](https://www.nhsx.nhs.uk/key-tools-and-info/nhsx-analytics-unit/) visit our [project website](https://nhsx.github.io/AnalyticsUnit/projects.html) or get in touch [here](mailto:analytics-unit@nhsx.nhs.uk).
+To find out more about [DART](https://www.nhsx.nhs.uk/key-tools-and-info/nhsx-analytics-unit/) visit our [project website](https://nhsx.github.io/AnalyticsUnit/projects.html) or get in touch [here](mailto:england.tdau@nhs.net).
 
 ### Acknowledgements
 
