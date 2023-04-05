@@ -187,6 +187,7 @@ class IncidentModel(pl.LightningModule):
         class_labels=None,
         reinit_n_layers=2,
         nr_frozen_epochs=0,
+        nr_frozen_layers=0,
         encoder_learning_rate=2e-5,
         classifier_learning_rate=3e-5,
         optimizer="AdamW",
@@ -262,6 +263,7 @@ class IncidentModel(pl.LightningModule):
         self.n_training_steps = n_training_steps
         self.n_warmup_steps = n_warmup_steps
         self.nr_frozen_epochs = nr_frozen_epochs
+        self.nr_frozen_layers = nr_frozen_layers
         self.encoder_learning_rate = encoder_learning_rate
         self.classifier_learning_rate = classifier_learning_rate
         self.optimizer = optimizer
@@ -274,7 +276,9 @@ class IncidentModel(pl.LightningModule):
                     "classification head!"
                 )
             )
-            self.freeze_encoder()
+            # self.freeze_encoder() # replace with freeze_n_layers
+            # if nr_frozen_layers > -1 then freeze n layers otherwise freeze all
+            self.freeze_n_layers(self.nr_frozen_layers)
         else:
             self._frozen = False
 
@@ -355,7 +359,7 @@ class IncidentModel(pl.LightningModule):
 
     def freeze_n_layers(model, freeze_layer_count=0) -> None:
         """freeze N last layers of a transformer model"""
-        # first freeze the embedding layer
+        # first freeze the embedding layer - we do this regardless
         for param in model.base_model.embeddings.parameters():
             param.requires_grad = False
         # if the freeze layer count is 0 - do nothing and leave requires_grad = True
