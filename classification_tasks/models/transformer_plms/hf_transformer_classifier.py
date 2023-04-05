@@ -30,7 +30,6 @@ from transformers import (
 )
 from transformers.modeling_outputs import (
     SequenceClassifierOutput,
-    TokenClassifierOutput,
 )
 from transformers.optimization import Adafactor
 
@@ -392,7 +391,7 @@ class IncidentModel(pl.LightningModule):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    ) -> Union[Tuple[torch.Tensor], TokenClassifierOutput]:
+    ) -> Union[Tuple[torch.Tensor], SequenceClassifierOutput]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size, sequence_length)`,
         *optional*):

@@ -707,6 +707,7 @@ def main():
         optimizer=args.optimizer,
         dropout=args.dropout,
         cache_dir=args.cache_dir,
+        model_type=args.model_type,
     )
 
     print(model)
