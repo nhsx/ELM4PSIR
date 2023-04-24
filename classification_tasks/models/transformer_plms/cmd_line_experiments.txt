@@ -1,4 +1,4 @@
-# Frozen PLMs for max 15 epochs
+# Frozen PLMs for max 15 epochs - freeze all layers
 ## choose from:
     "roberta-base",
     "johngiorgi/declutr-base",
@@ -6,7 +6,7 @@
     or locally trained model
 
 # run
-python .\pl_trainer.py --model_type autoforsequence --encoder_model sentence-transformers/all-distilroberta-v1 --dataset severity --binary_class_transform --training_size fewshot --few_shot_n 7000 --nr_frozen_epochs 30 --max_epochs 15 --batch_size 16
+python .\pl_trainer.py --model_type autoforsequence --encoder_model sentence-transformers/all-distilroberta-v1 --dataset severity --binary_class_transform --training_size fewshot --few_shot_n 7000 --nr_frozen_epochs 30 --nr_frozen_layers -1 --max_epochs 15 --batch_size 16
 
 
 # Finetune for max 5 epochs

@@ -30,7 +30,6 @@ from transformers import (
 )
 from transformers.modeling_outputs import (
     SequenceClassifierOutput,
-    TokenClassifierOutput,
 )
 from transformers.optimization import Adafactor
 
@@ -188,6 +187,7 @@ class IncidentModel(pl.LightningModule):
         class_labels=None,
         reinit_n_layers=2,
         nr_frozen_epochs=0,
+        nr_frozen_layers=0,
         encoder_learning_rate=2e-5,
         classifier_learning_rate=3e-5,
         optimizer="AdamW",
@@ -263,6 +263,7 @@ class IncidentModel(pl.LightningModule):
         self.n_training_steps = n_training_steps
         self.n_warmup_steps = n_warmup_steps
         self.nr_frozen_epochs = nr_frozen_epochs
+        self.nr_frozen_layers = nr_frozen_layers
         self.encoder_learning_rate = encoder_learning_rate
         self.classifier_learning_rate = classifier_learning_rate
         self.optimizer = optimizer
@@ -271,11 +272,13 @@ class IncidentModel(pl.LightningModule):
         if self.nr_frozen_epochs > 0:
             logger.warning(
                 (
-                    "Freezing the PLM i.e. the encoder - will just be tuning the "
-                    "classification head!"
+                    f"Freezing {self.nr_frozen_layers} layers of the PLM i.e. the encoder. "
+                    " Primarily tuning the classification head!"
                 )
             )
-            self.freeze_encoder()
+            # self.freeze_encoder() # replace with freeze_n_layers
+            # if nr_frozen_layers > -1 then freeze n layers otherwise freeze all
+            self.freeze_n_layers(self.nr_frozen_layers)
         else:
             self._frozen = False
 
@@ -310,21 +313,6 @@ class IncidentModel(pl.LightningModule):
             if self.model_type == "autoforsequence":
                 for param in self.model.base_model.parameters():
                     param.requires_grad = True
-                # the name of the PLM component depends on the architecture/pretrained
-                # model
-                # if "roberta" in self.model.name_or_path:
-
-                #     for param in self.model.roberta.parameters(): # can maybe replace
-                # with self.model.base_model? and avoid this if
-                # roberta or bert business?
-                #         param.requires_grad = True
-
-                # elif "bert" in self.model.name_or_path:
-                #     for param in self.model.bert.parameters():
-                #         param.requires_grad = True
-
-                # else:
-                #     raise NotImplementedError
             else:
                 for param in self.model.parameters():
                     param.requires_grad = True
@@ -336,48 +324,38 @@ class IncidentModel(pl.LightningModule):
         if self.model_type == "autoforsequence":
             for param in self.model.base_model.parameters():
                 param.requires_grad = False
-            # the name of the PLM component depends on the architecture/pretrained
-            # model
-            # if "roberta" in self.model.name_or_path:
-
-            #     for param in self.model.roberta.parameters():
-            #         param.requires_grad = False
-
-            # elif "bert" in self.model.name_or_path:
-            #     for param in self.model.bert.parameters():
-            #         param.requires_grad = False
-            # else:
-            #     raise NotImplementedError
-
         else:
             for param in self.model.parameters():
                 param.requires_grad = False
         self._frozen = True
 
-    # def forward(self, input_ids, attention_mask, labels=None):
-    #     output = self.model(input_ids, attention_mask=attention_mask)
-    #     # obtaining the last layer hidden states of the Transformer
-    #     last_hidden_state = output.last_hidden_state  # shape: (
-    #       batch_size,
-    #       seq_length,
-    #       bert_hidden_dim
-    #      )
+    def freeze_n_layers(model, freeze_layer_count=0) -> None:
+        """freeze N last layers of a transformer model"""
+        # first freeze the embedding layer - we do this regardless
+        for param in model.base_model.embeddings.parameters():
+            param.requires_grad = False
+        # if the freeze layer count is 0 - do nothing and leave requires_grad = True
 
-    #     #         or can use the output pooler : output = self.classifier(
-    #       output.pooler_output
-    #       )
-    #     # As I said, the CLS token is in the beginning of the sequence. So, we grab
-    #       its representation
-    #     # by indexing the tensor containing the hidden representations
-    #     CLS_token_state = last_hidden_state[:, 0, :]
-    #     # passing this representation through our custom head
-    #     logits = self.classifier(CLS_token_state)
-    #     loss = 0
-    #     if labels is not None:
-    #         loss = self.criterion(logits, labels)
-    #     return loss, logits
+        if freeze_layer_count > model.config.num_hidden_layers:
+            print(
+                f"""The freeze_layer_count provided:{freeze_layer_count}
+            is higher than the number of layers the model has: {model.config.num_hidden_layers}!
+            """
+            )
+        else:
+            if freeze_layer_count != 0:
+                if freeze_layer_count != -1:
+                    # if freeze_layer_count == -1, we freeze all of em
+                    # otherwise we freeze the first `freeze_layer_count` encoder layers
+                    for layer in model.base_model.encoder.layer[:freeze_layer_count]:
+                        for param in layer.parameters():
+                            param.requires_grad = False
+                else:
+                    # freeze all layers
+                    for layer in model.base_model.encoder.layer:
+                        for param in layer.parameters():
+                            param.requires_grad = False
 
-    # TODO - adapt this below forward method to work
     def forward(
         self,
         input_ids: Optional[torch.LongTensor] = None,
@@ -390,7 +368,7 @@ class IncidentModel(pl.LightningModule):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    ) -> Union[Tuple[torch.Tensor], TokenClassifierOutput]:
+    ) -> Union[Tuple[torch.Tensor], SequenceClassifierOutput]:
         r"""
         labels (`torch.LongTensor` of shape `(batch_size, sequence_length)`,
         *optional*):
@@ -466,7 +444,6 @@ class IncidentModel(pl.LightningModule):
         else:
             raise NotImplementedError
 
-    # TODO - update the training steps etc to work with SequenceClassifierOutput
     def training_step(self, batch, batch_idx):
         # input_ids = batch["input_ids"]
         # attention_mask = batch["attention_mask"]
@@ -555,7 +532,7 @@ class IncidentModel(pl.LightningModule):
         recall_weighted = recall_score(labels, predictions, average="weighted")
         recall_macro = recall_score(labels, predictions, average="macro")
 
-        #  roc_auc  - only really good for binaryy classification but can try for
+        #  roc_auc  - only really good for binary classification but can try for
         # multiclass too pytorch lightning runs a sanity check and roc_score fails
         # if not all classes appear...
         try:
@@ -726,23 +703,6 @@ class IncidentModel(pl.LightningModule):
         """Sets different Learning rates for different parameter groups."""
 
         if self.model_type == "autoforsequence":
-            # if "roberta" in self.model.name_or_path:
-            #     parameters = [
-            #         {"params": self.model.classifier.parameters()},
-            #         {
-            #             "params": self.model.roberta.parameters(),
-            #             "lr": self.encoder_learning_rate,
-            #         },
-            #     ]
-            # elif "bert" in self.model.name_or_path:
-            #     parameters = [
-            #         {"params": self.model.classifier.parameters()},
-            #         {
-            #             "params": self.model.bert.parameters(),
-            #             "lr": self.encoder_learning_rate,
-            #         },
-            #     ]
-
             parameters = [
                 {"params": self.model.classifier.parameters()},
                 {
@@ -750,9 +710,6 @@ class IncidentModel(pl.LightningModule):
                     "lr": self.encoder_learning_rate,
                 },
             ]
-
-            # else:
-            #     raise NotImplementedError
 
         else:
             parameters = [

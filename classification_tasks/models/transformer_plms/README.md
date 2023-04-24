@@ -18,8 +18,11 @@ For our experiments we chose to sample 7k samplers per binary label for the trai
 **Note** the `./pl_trainer.py` script will create and use the same dataset created by `../data_utils/create_fewshot_dataset.py`
 
 ### With frozen PLM
+
+**Note** we use a function to freeze N layers of the transformer PLM - for our experiments we chose to freeze all layers using the argument 'nr_frozen_epochs' = -1. Feel free to select a different number of layers to freeze, keeping in mind different PLMs have varying number of layers.
+
 ```{bash}
-python ./pl_trainer.py --model_type autoforsequence --encoder_model {PLM_OF_CHOICE}  --dataset severity --binary_class_transform --training_size fewshot --few_shot_n 7000 --eval_few_shot_n 7000 --nr_frozen_epochs 5 --max_epochs 5
+python ./pl_trainer.py --model_type autoforsequence --encoder_model {PLM_OF_CHOICE}  --dataset severity --binary_class_transform --training_size fewshot --few_shot_n 7000 --eval_few_shot_n 7000 --nr_frozen_epochs 5 --nr_frozen_layers -1 --max_epochs 5
 ```
 
 ### Finetune everything

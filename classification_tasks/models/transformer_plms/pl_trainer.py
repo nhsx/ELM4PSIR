@@ -269,7 +269,12 @@ def main():
         type=int,
         help="Number of epochs we want to keep the encoder model frozen.",
     )
-
+    parser.add_argument(
+        "--nr_frozen_layers",
+        default=0,
+        type=int,
+        help="Number of epochs we want to keep the encoder model frozen.",
+    )
     parser.add_argument(
         "--dropout",
         default=0.1,
@@ -463,37 +468,40 @@ def main():
     # update ckpt and logs dir based on whether plm (encoder) was frozen during training
 
     if args.nr_frozen_epochs > 0:
-        logger.warning("Freezing the encoder/plm for {args.nr_frozen_epochs} epochs")
+        logger.warning(f"Freezing the encoder/plm for {args.nr_frozen_epochs} epochs")
+
         if args.sensitivity:
             logger.warning("Performing frozen sensitivity analysis")
             ckpt_dir = (
                 f"{args.ckpt_save_dir}/sensitivity/{args.dataset}/{args.training_size}"
                 f"_{args.few_shot_n}_classhidden_{args.classifier_hidden_dim}"
-                f"/frozen_plm/{pretrained_model_name}/{model_type}/version_{time_now}"
+                f"/frozen_plm_{args.nr_frozen_layers}_layers/{pretrained_model_name}/"
+                f"{model_type}/version_{time_now}"
             )
-            log_dir = f"{log_dir}/frozen_plm"
+            log_dir = f"{log_dir}/frozen_plm_{args.nr_frozen_layers}_layers"
         elif args.optimized_run:
             ckpt_dir = (
                 f"{args.ckpt_save_dir}/optimized_run/{args.dataset}/"
                 f"{args.training_size}_{args.few_shot_n}_classhidden_"
-                f"{args.classifier_hidden_dim}/frozen_plm/{pretrained_model_name}/"
-                f"{model_type}/version_{time_now}"
+                f"{args.classifier_hidden_dim}/frozen_plm_{args.nr_frozen_layers}_layers/"
+                f"{pretrained_model_name}/{model_type}/version_{time_now}"
             )
-            log_dir = f"{log_dir}/frozen_plm"
+            log_dir = f"{log_dir}/frozen_plm_{args.nr_frozen_layers}_layers"
         elif args.binary_class_transform:
             ckpt_dir = (
                 f"{args.ckpt_save_dir}/{args.dataset}/binary_class/{args.training_size}"
                 f"_{args.few_shot_n}_classhidden_{args.classifier_hidden_dim}"
-                f"/frozen_plm/{pretrained_model_name}/{model_type}/version_{time_now}"
+                f"/frozen_plm_{args.nr_frozen_layers}_layers/{pretrained_model_name}/{model_type}/"
+                f"version_{time_now}"
             )
-            log_dir = f"{log_dir}/frozen_plm"
+            log_dir = f"{log_dir}/frozen_plm_{args.nr_frozen_layers}_layers"
         else:
             ckpt_dir = (
                 f"{args.ckpt_save_dir}/{args.dataset}/{args.training_size}_"
-                f"{args.few_shot_n}/frozen_plm/{pretrained_model_name}/{model_type}"
-                f"/version_{time_now}"
+                f"{args.few_shot_n}/frozen_plm_{args.nr_frozen_layers}_layers/"
+                f"{pretrained_model_name}/{model_type}/version_{time_now}"
             )
-            log_dir = f"{log_dir}/frozen_plm"
+            log_dir = f"{log_dir}/frozen_plm_{args.nr_frozen_layers}_layers"
 
     logger.warning(f"Logs will be saved at: {log_dir} and ckpts at: {ckpt_dir}")
 
@@ -697,6 +705,7 @@ def main():
         n_warmup_steps=warmup_steps,
         n_training_steps=total_training_steps,
         nr_frozen_epochs=args.nr_frozen_epochs,
+        nr_frozen_layers=args.nr_frozen_layers,
         ce_class_weights=ce_class_weights,
         weight_classes=args.class_weights,
         reinit_n_layers=reinit_n_layers,
@@ -707,6 +716,7 @@ def main():
         optimizer=args.optimizer,
         dropout=args.dropout,
         cache_dir=args.cache_dir,
+        model_type=args.model_type,
     )
 
     print(model)
