@@ -272,8 +272,8 @@ class IncidentModel(pl.LightningModule):
         if self.nr_frozen_epochs > 0:
             logger.warning(
                 (
-                    "Freezing the PLM i.e. the encoder - will just be tuning the "
-                    "classification head!"
+                    f"Freezing {self.nr_frozen_layers} layers of the PLM i.e. the encoder. "
+                    " Primarily tuning the classification head!"
                 )
             )
             # self.freeze_encoder() # replace with freeze_n_layers
@@ -313,21 +313,6 @@ class IncidentModel(pl.LightningModule):
             if self.model_type == "autoforsequence":
                 for param in self.model.base_model.parameters():
                     param.requires_grad = True
-                # the name of the PLM component depends on the architecture/pretrained
-                # model
-                # if "roberta" in self.model.name_or_path:
-
-                #     for param in self.model.roberta.parameters(): # can maybe replace
-                # with self.model.base_model? and avoid this if
-                # roberta or bert business?
-                #         param.requires_grad = True
-
-                # elif "bert" in self.model.name_or_path:
-                #     for param in self.model.bert.parameters():
-                #         param.requires_grad = True
-
-                # else:
-                #     raise NotImplementedError
             else:
                 for param in self.model.parameters():
                     param.requires_grad = True
@@ -339,19 +324,6 @@ class IncidentModel(pl.LightningModule):
         if self.model_type == "autoforsequence":
             for param in self.model.base_model.parameters():
                 param.requires_grad = False
-            # the name of the PLM component depends on the architecture/pretrained
-            # model
-            # if "roberta" in self.model.name_or_path:
-
-            #     for param in self.model.roberta.parameters():
-            #         param.requires_grad = False
-
-            # elif "bert" in self.model.name_or_path:
-            #     for param in self.model.bert.parameters():
-            #         param.requires_grad = False
-            # else:
-            #     raise NotImplementedError
-
         else:
             for param in self.model.parameters():
                 param.requires_grad = False
@@ -379,6 +351,7 @@ class IncidentModel(pl.LightningModule):
                         for param in layer.parameters():
                             param.requires_grad = False
                 else:
+                    # freeze all layers
                     for layer in model.base_model.encoder.layer:
                         for param in layer.parameters():
                             param.requires_grad = False
@@ -730,23 +703,6 @@ class IncidentModel(pl.LightningModule):
         """Sets different Learning rates for different parameter groups."""
 
         if self.model_type == "autoforsequence":
-            # if "roberta" in self.model.name_or_path:
-            #     parameters = [
-            #         {"params": self.model.classifier.parameters()},
-            #         {
-            #             "params": self.model.roberta.parameters(),
-            #             "lr": self.encoder_learning_rate,
-            #         },
-            #     ]
-            # elif "bert" in self.model.name_or_path:
-            #     parameters = [
-            #         {"params": self.model.classifier.parameters()},
-            #         {
-            #             "params": self.model.bert.parameters(),
-            #             "lr": self.encoder_learning_rate,
-            #         },
-            #     ]
-
             parameters = [
                 {"params": self.model.classifier.parameters()},
                 {
@@ -754,9 +710,6 @@ class IncidentModel(pl.LightningModule):
                     "lr": self.encoder_learning_rate,
                 },
             ]
-
-            # else:
-            #     raise NotImplementedError
 
         else:
             parameters = [

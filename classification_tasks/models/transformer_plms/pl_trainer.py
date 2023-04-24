@@ -478,7 +478,7 @@ def main():
                 f"/frozen_plm_{args.nr_frozen_layers}_layers/{pretrained_model_name}/"
                 f"{model_type}/version_{time_now}"
             )
-            log_dir = f"{log_dir}/frozen_plm"
+            log_dir = f"{log_dir}/frozen_plm_{args.nr_frozen_layers}_layers"
         elif args.optimized_run:
             ckpt_dir = (
                 f"{args.ckpt_save_dir}/optimized_run/{args.dataset}/"
@@ -486,7 +486,7 @@ def main():
                 f"{args.classifier_hidden_dim}/frozen_plm_{args.nr_frozen_layers}_layers/"
                 f"{pretrained_model_name}/{model_type}/version_{time_now}"
             )
-            log_dir = f"{log_dir}/frozen_plm"
+            log_dir = f"{log_dir}/frozen_plm_{args.nr_frozen_layers}_layers"
         elif args.binary_class_transform:
             ckpt_dir = (
                 f"{args.ckpt_save_dir}/{args.dataset}/binary_class/{args.training_size}"
@@ -494,14 +494,14 @@ def main():
                 f"/frozen_plm_{args.nr_frozen_layers}_layers/{pretrained_model_name}/{model_type}/"
                 f"version_{time_now}"
             )
-            log_dir = f"{log_dir}/frozen_plm"
+            log_dir = f"{log_dir}/frozen_plm_{args.nr_frozen_layers}_layers"
         else:
             ckpt_dir = (
                 f"{args.ckpt_save_dir}/{args.dataset}/{args.training_size}_"
                 f"{args.few_shot_n}/frozen_plm_{args.nr_frozen_layers}_layers/"
                 f"{pretrained_model_name}/{model_type}/version_{time_now}"
             )
-            log_dir = f"{log_dir}/frozen_plm"
+            log_dir = f"{log_dir}/frozen_plm_{args.nr_frozen_layers}_layers"
 
     logger.warning(f"Logs will be saved at: {log_dir} and ckpts at: {ckpt_dir}")
 
